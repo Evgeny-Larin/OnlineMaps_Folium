@@ -44,7 +44,7 @@ def color_producer(point, p_region, hex_palette):
 
 
 #загружаем файл с координатами
-file = st.file_uploader('Загрузите файл Excel с координатами точек:', type = ['.xlsx', '.xlsm', 'xls'], label_visibility = 'hidden')
+file = st.file_uploader('Загрузите файл Excel с координатами точек:', type = ['.xlsx', '.xlsm', 'xls'])
 #образец файла для пользователя
 st.write("Пример исходной таблицы:")
 st.image("https://i.ibb.co/c8DJ9ZP/f3580096-358a-4ab2-b07b-d41895789bd9.jpg")
