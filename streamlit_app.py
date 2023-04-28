@@ -74,10 +74,10 @@ if file != None:
 
 col01, col02 = st.columns(2)
 with col01:
+    point_size = st.slider('Размер точек', 50, 200, 90)
+with col02:
     #если пользователь хочет отображать города на карте
     city_on = st.checkbox('Отображать города на карте')
-with col02:
-    point_size = st.slider('Размер точек', 50, 200, 90)
 
 #настройка легенды
 st.write("Настройка легенды:")
