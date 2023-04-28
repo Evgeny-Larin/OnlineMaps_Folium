@@ -44,8 +44,7 @@ def color_producer(point, p_region, hex_palette):
 
 
 
-
-file = st.file_uploader('Загрузите файл Excel с координатами точек', type = ['.xlsx', '.xlsm', 'xls'])
+file = st.file_uploader('Загрузите файл Excel с координатами точек:', type = ['.xlsx', '.xlsm', 'xls'], label_visibility = 'hidden')
 st.write("Пример исходной таблицы:")
 st.image("https://i.ibb.co/c8DJ9ZP/f3580096-358a-4ab2-b07b-d41895789bd9.jpg")
 
@@ -72,7 +71,7 @@ if file != None:
     
 
 
-st.write("Задайте цвета для легенды")
+st.write("Настройка легенды:")
 col1, col2, col3, col4 = st.columns(4)
 with col1:
    hex1 = st.color_picker('Цвет 1', '#FF1100', key = 1)
@@ -116,7 +115,7 @@ for i in regions_list:
     #из p_df получаем точки и отмечаем их на карте
     points_region.apply(lambda row:folium.Circle(location=[row["lat"], row["lon"]], 
                                          radius=90,
-#                                        popup=row['address'], #нажатие на точку (пока отключено, почему-то не открывается файл Томской области)
+                                         popup=repr(row['address']), #нажатие на точку (пока отключено, почему-то не открывается файл Томской области)
                                          tooltip=row['name'], 
                                          fill = True, 
                                          weight=0.5, 
