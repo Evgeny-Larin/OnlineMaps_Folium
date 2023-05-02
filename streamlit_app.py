@@ -44,7 +44,7 @@ def color_producer(point, p_region, hex_palette):
 
 
 #загружаем файл с координатами
-file = st.file_uploader('Загрузите файл Excel с координатами точек:', type = ['.xlsx', '.xlsm', 'xls'])
+file = st.file_uploader('Загрузите файл Excel с координатами точек:', type = ['.xlsx', '.xlsm', '.xls', '.xlsb'])
 #образец файла для пользователя
 st.write("Пример исходной таблицы:")
 st.image("https://i.ibb.co/c8DJ9ZP/f3580096-358a-4ab2-b07b-d41895789bd9.jpg")
@@ -58,7 +58,7 @@ if file != None:
                              'Долгота':'lon',
                              'Город':'city',
                              'Регион':'SubRegion'}, inplace = True)
-    points = points[~points.lat.isna()]
+    points = points[(~points.lat.isna())&(~points.lon.isna())]
     #выбор интересующих регионов или все на одной карте
     values = ['Все регионы на одной карте']
     values.extend(points.SubRegion.drop_duplicates().tolist())
