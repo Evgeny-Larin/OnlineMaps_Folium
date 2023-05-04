@@ -126,7 +126,7 @@ def points_creator(points, russia_map, hex_palette):
             #если цвет не нашли - цвет серый
             color = 'grey'
         #объединяем в группы, устанавливаем цвет и название группы 
-        feature_group = folium.FeatureGroup(f'<span style="color: {color};">{grp_name}</span>')
+        feature_group = folium.FeatureGroup(f'<span style="color: {color};"> ⬤ {grp_name}</span>')
         #для каждой строки в группе
         for row in df_grp.itertuples():
             #рисуем точку. row3 и row4 - координаты, row2 - адрес точки
