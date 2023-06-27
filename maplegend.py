@@ -182,3 +182,33 @@ def points_creator(points, russia_map, hex_palette):
 
     #добавляем панель управления группами (легенду) на карту
     folium.map.LayerControl('topright', collapsed= False).add_to(russia_map)
+   
+# добавляет пользовательскую подпись (атрибуцию) в правой нижней части карты
+def add_atr(m):
+    # Добавляем CSS стили для правой нижней части карты
+    css = """
+        <style>
+         .leaflet-control-attribution {
+             display:none;
+         }
+
+         .custom-attribution {
+             position: absolute;
+             right: 0;
+             bottom: 0;
+             font-size: 10px;
+             background-color: rgba(255, 255, 255, 0.5);
+             padding: 2px 5px;
+             z-index: 5000;
+         }
+        </style>
+    """
+
+    # Добавляем CSS стили на карту
+    m.get_root().html.add_child(folium.Element(css))
+
+    # Добавляем кастомную атрибуцию в правую нижнюю часть карты
+    attribution = """
+         <span class='custom-attribution'>Data © OpenStreetMap contributors</span>
+    """
+    m.get_root().html.add_child(folium.Element(attribution))
