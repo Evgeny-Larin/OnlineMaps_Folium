@@ -69,9 +69,9 @@ def color_distributor(top13, hex_palette):
 
 #генератор карты
 #принимает df с координатами точек в столбцах lat и lon
-def map_creator(df, mapstyle):
+def map_creator(df, mapstyle, minimap, zoom):
     russia_map = folium.Map(location = [df.lat.median(), df.lon.median()], #начальная позиция камеры
-                            zoom_start = 7, #начальный зум камеры
+                            zoom_start = zoom, #начальный зум камеры
                             tiles = None) #стиль карты None, чтобы не было названия в легенде
     
     #задачем стиль карты
@@ -92,8 +92,9 @@ def map_creator(df, mapstyle):
     #поиск
     plugins.Geocoder(collapsed=True, position='topleft').add_to(russia_map)
     #миникарта
-    minimap = plugins.MiniMap()
-    russia_map.add_child(minimap)
+    if minimap == True:
+        minimap = plugins.MiniMap()
+        russia_map.add_child(minimap)
     return russia_map
 
 def cartodbpositron_map(russia_map):
@@ -136,7 +137,7 @@ def city_creator(city_db, russia_map):
 
 #добавляет точки на карту
 #принимает df с координатами необходимых точек, карту, на которую нужно добавить города, палитру цветов
-def points_creator(points, russia_map, hex_palette):
+def points_creator(points, russia_map, hex_palette, point_size):
     #определяем топ13 компаний и прочие
     top13 = points_rating(points)
     #добавляем к основному df признак топовости компании, остальных помечаем как Прочие
@@ -169,7 +170,7 @@ def points_creator(points, russia_map, hex_palette):
         for row in df_grp.itertuples():
             #рисуем точку. row3 и row4 - координаты, row2 - адрес точки
             folium.Circle(location=[row[3], row[4]], 
-                                         radius=90,
+                                         radius=point_size,
                                          popup=repr(row[2]),
                                          tooltip=row[1], 
                                          fill = True, 
@@ -183,7 +184,7 @@ def points_creator(points, russia_map, hex_palette):
     #добавляем панель управления группами (легенду) на карту
     folium.map.LayerControl('topright', collapsed= False).add_to(russia_map)
    
-# добавляет пользовательскую подпись (атрибуцию) в правой нижней части карты
+# удаляет подпись (атрибуцию) в правой нижней части карты
 def add_atr(russia_map):
     # Добавляем CSS стили для правой нижней части карты
     css = """
@@ -196,8 +197,8 @@ def add_atr(russia_map):
              position: absolute;
              right: 0;
              bottom: 0;
-             font-size: 10px;
-             background-color: rgba(255, 255, 255, 0.5);
+             font-size: 20px;
+             background-color: rgba(255, 255, 255, 0);
              padding: 2px 5px;
              z-index: 5000;
          }
@@ -206,10 +207,22 @@ def add_atr(russia_map):
 
     # Добавляем CSS стили на карту
     russia_map.get_root().html.add_child(folium.Element(css))
-
-    # Добавляем кастомную атрибуцию в правую нижнюю часть карты
-    attribution = """
-         <span class='custom-attribution'>Data © OpenStreetMap contributors</span>
-    """
-    russia_map.get_root().html.add_child(folium.Element(attribution))
-    return russia_map
+    
+# кнопка для скачивания шаблона
+def redirect_button(url: str, text: str= None, color="#FD504D"):
+    st.markdown(
+    f"""
+    <a href="{url}" target="_self">
+        <div style="
+            display: inline-block;
+            padding: 0.5em 1em;
+            color: #FFFFFF;
+            background-color: {color};
+            border-radius: 3px;
+            text-decoration: none;">
+            {text}
+        </div>
+    </a>
+    """,
+    unsafe_allow_html=True
+    )

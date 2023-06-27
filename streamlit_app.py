@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # !python -m pip --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install --default-timeout=100 --upgrade streamlit-folium
 # !python -m pip --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install --default-timeout=100 --upgrade streamlit
 # !python -m pip --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install --default-timeout=100 --upgrade folium
@@ -14,7 +13,8 @@ file = st.file_uploader('Загрузите файл Excel с координат
 
 #образец файла для пользователя
 with st.expander("Пример исходной таблицы"):
-    st.image("https://i.ibb.co/c8DJ9ZP/f3580096-358a-4ab2-b07b-d41895789bd9.jpg")
+    txt = st.write('''Скачайте и заполните шаблон исходной таблицы собственными данными. Столбцы "Широта" и "Долгота" являются обязательными.''')
+    redirect_button("https://github.com/Evgeny-Larin/onlinemaps_folium/raw/main/source/example.xlsx","Скачать шаблон")
 
 regions_list = []
 if file != None:
@@ -25,6 +25,12 @@ if file != None:
                              'Долгота':'lon',
                              'Город':'city',
                              'Регион':'SubRegion'}, inplace = True)
+    
+    points['name'].fillna('Имя не указано', inplace = True)        
+    points['address'].fillna('Адрес не указан', inplace = True) 
+    points['city'].fillna('Город не указан', inplace = True) 
+    points['SubRegion'].fillna('Регион не указан', inplace = True)
+    
     points = points[(~points.lat.isna())&(~points.lon.isna())]
     #выбор интересующих регионов или все на одной карте
     values = ['Все регионы на одной карте']
@@ -46,7 +52,9 @@ with st.sidebar:
                 ('Стандартная', 'ЖД пути и станции', 'ЖД пути и станции 2'))
     #если пользователь хочет отображать города на карте
     city_on = st.checkbox('Отображать города на карте')
+    minimap = st.checkbox('Отображать мини-карту')
     point_size = st.slider('Размер точек', 50, 200, 90)
+    zoom = st.slider('Исходный масштаб карты', 1, 15, 7)
 
     #настройка легенды
     st.write("Настройка легенды:")
@@ -69,6 +77,8 @@ with st.sidebar:
        hex8 = st.color_picker('Цвет 8', '#64E600', key = 11)
        hex12 = st.color_picker('Цвет 12', '#9383C9', key = 12)
        
+
+       
 #сохраняем выбранные цвета
 hex_palette = [hex1,hex2,hex3,hex4,hex5,hex6,hex7,hex8,hex9,hex10,hex11,hex12]
 
@@ -85,17 +95,17 @@ if city_on and regions_list != []:
 if regions_list ==  ["Все регионы на одной карте"]:
            
     #создаем карту
-    russia_map = map_creator(points, mapstyle)
+    russia_map = map_creator(points, mapstyle, minimap, zoom)
     
     #если отмечаем города на карте - отмечаем их на карте    
     if city_on:
         city_creator(city_db, russia_map)
 
     #отмечаем точки на карте    
-    points_creator(points, russia_map, hex_palette)
+    points_creator(points, russia_map, hex_palette, point_size)
     
     # добавляем пользовательскую подпись (атрибуцию) в правой нижней части карты
-    russia_map = add_atr(russia_map)
+    add_atr(russia_map)
     
     #преобразовываем объект карты (russia_map) в HTML-строку
     map_html = russia_map.get_root().render()
@@ -121,7 +131,7 @@ else:
             points_region = points[(points['SubRegion'] == i)]            
     
         #создаем карту
-        russia_map = map_creator(points_region, mapstyle)
+        russia_map = map_creator(points_region, mapstyle, minimap, zoom)
 
         #если отмечаем города на карте - отмечаем их на карте
         if city_on:
@@ -129,10 +139,10 @@ else:
             city_creator(city_db, russia_map)
         
         #отмечаем точки на карте
-        points_creator(points_region, russia_map, hex_palette)
+        points_creator(points_region, russia_map, hex_palette, point_size)
         
         # добавляем пользовательскую подпись (атрибуцию) в правой нижней части карты
-        russia_map = add_atr(russia_map)
+        add_atr(russia_map)
         
         #преобразовываем объект карты (russia_map) в HTML-строку
         map_html = russia_map.get_root().render()
