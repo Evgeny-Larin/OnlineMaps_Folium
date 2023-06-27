@@ -95,7 +95,7 @@ if regions_list ==  ["Все регионы на одной карте"]:
     points_creator(points, russia_map, hex_palette)
     
     # добавляем пользовательскую подпись (атрибуцию) в правой нижней части карты
-    add_atr(russia_map)
+    russia_map = add_atr(russia_map)
     
     #преобразовываем объект карты (russia_map) в HTML-строку
     map_html = russia_map.get_root().render()
@@ -131,8 +131,8 @@ else:
         #отмечаем точки на карте
         points_creator(points_region, russia_map, hex_palette)
         
-        # пользовательскую подпись (атрибуцию) в правой нижней части карты
-        add_atr(russia_map)
+        # добавляем пользовательскую подпись (атрибуцию) в правой нижней части карты
+        russia_map = add_atr(russia_map)
         
         #преобразовываем объект карты (russia_map) в HTML-строку
         map_html = russia_map.get_root().render()

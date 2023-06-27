@@ -184,7 +184,7 @@ def points_creator(points, russia_map, hex_palette):
     folium.map.LayerControl('topright', collapsed= False).add_to(russia_map)
    
 # добавляет пользовательскую подпись (атрибуцию) в правой нижней части карты
-def add_atr(m):
+def add_atr(russia_map):
     # Добавляем CSS стили для правой нижней части карты
     css = """
         <style>
@@ -205,10 +205,11 @@ def add_atr(m):
     """
 
     # Добавляем CSS стили на карту
-    m.get_root().html.add_child(folium.Element(css))
+    russia_map.get_root().html.add_child(folium.Element(css))
 
     # Добавляем кастомную атрибуцию в правую нижнюю часть карты
     attribution = """
          <span class='custom-attribution'>Data © OpenStreetMap contributors</span>
     """
-    m.get_root().html.add_child(folium.Element(attribution))
+    russia_map.get_root().html.add_child(folium.Element(attribution))
+    return russia_map
