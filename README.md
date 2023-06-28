@@ -1,2 +1,2 @@
-Онлайн инструмент создания карт folium для пользователей, не работающими в python (с применением streamlit)  
-https://evgeny-larin-onlinemaps-folium-streamlit-app-lh6hvp.streamlit.app/
+Инструмент для создания карт folium для пользователей, не работающих в python (с применением streamlit)  
+https://onlinemapsfolium.streamlit.app/
