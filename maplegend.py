@@ -164,6 +164,8 @@ def points_creator(points, russia_map, hex_palette, point_size):
         except:
             #если цвет не нашли - цвет серый
             color = 'grey'
+        #переводим grp_name подпись легенды в str
+        grp_name = ''.join(grp_name)
         #объединяем в группы, устанавливаем цвет и название группы 
         feature_group = folium.FeatureGroup(f'<span style="color: {color};"> ⬤ {grp_name}</span>')
         #для каждой строки в группе
