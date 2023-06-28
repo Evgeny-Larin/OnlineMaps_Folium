@@ -182,7 +182,7 @@ def points_creator(points, russia_map, hex_palette, point_size):
         feature_group.add_to(russia_map)
 
     #добавляем панель управления группами (легенду) на карту
-    folium.map.LayerControl(name = None , overlay = True , control = True , show = True, collapsed= False).add_to(russia_map)
+    folium.map.LayerControl('topright', collapsed= False).add_to(russia_map)
    
 # удаляет подпись (атрибуцию) в правой нижней части карты
 def add_atr(russia_map):
