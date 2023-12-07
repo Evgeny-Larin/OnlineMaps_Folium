@@ -1,9 +1,7 @@
-# !python -m pip --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install --default-timeout=100 --upgrade streamlit-folium
-# !python -m pip --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install --default-timeout=100 --upgrade streamlit
-# !python -m pip --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install --default-timeout=100 --upgrade folium
 import streamlit as st
 from streamlit_folium import st_folium
-from maplegend import *
+from map_components import *
+import sqlite3
 
 #содержимое страницы по ширине (по умолчанию по центру)
 st.set_page_config(page_title = 'Map Generator', page_icon = '🗺️', layout="wide")
@@ -49,7 +47,7 @@ with st.sidebar:
     st.write("Настройка карты:")
     mapstyle = st.radio(
                 "Стиль:",
-                ('Стандартная', 'ЖД пути и станции', 'ЖД пути и станции 2'))
+                ('Стандартная цветная', 'Стандартная приглушённая', 'ЖД пути и станции', 'ЖД пути и станции 2'))
     #если пользователь хочет отображать города на карте
     city_on = st.checkbox('Отображать города на карте')
     minimap = st.checkbox('Отображать мини-карту')
@@ -85,10 +83,13 @@ hex_palette = [hex1,hex2,hex3,hex4,hex5,hex6,hex7,hex8,hex9,hex10,hex11,hex12]
 
 #если пользователь отмечает города и выбрал какой-либо регион
 if city_on and regions_list != []:
-    #подгружаем базу городов
-    city_db = pd.read_csv(r'https://raw.githubusercontent.com/Evgeny-Larin/OnlineMaps_Folium/main/db/cities_db.csv',usecols=['CityName', 'SubRegion', 'Latitude', 'Longitude', 'Population'], encoding='windows-1251', sep = ';')
+    #подключаемся к базе городов
+    conn = sqlite3.connect(r'https://raw.githubusercontent.com/Evgeny-Larin/OnlineMaps_Folium/main/db/cities_db.db')
+    
     #из базы берём только необходимые города
-    city_db = city_db[city_db['CityName'].isin(points.city.drop_duplicates().tolist())]
+    city_list = points.city.unique()
+    city_list = ', '.join(f"'{x}'" for x in city_list)
+    city_db = pd.read_sql(con=conn, sql = f'SELECT * FROM cities WHERE CityName IN ({city_list})')
 
 
 #если выбрано "Все регионы на одной карте" - строим одну карту

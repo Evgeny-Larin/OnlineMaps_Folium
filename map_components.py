@@ -74,8 +74,10 @@ def map_creator(df, mapstyle, minimap, zoom):
                             zoom_start = zoom, #начальный зум камеры
                             tiles = None) #стиль карты None, чтобы не было названия в легенде
     
-    #задачем стиль карты
-    if mapstyle == 'Стандартная':
+    #задаем стиль карты
+    if mapstyle == 'Стандартная цветная':
+        openstreetmap_map(russia_map)
+    elif mapstyle == 'Стандартная приглушённая':
         cartodbpositron_map(russia_map)
     elif mapstyle == 'ЖД пути и станции':
         cartodbpositron_map(russia_map)
@@ -97,6 +99,17 @@ def map_creator(df, mapstyle, minimap, zoom):
         russia_map.add_child(minimap)
     return russia_map
 
+# стиль карты 'Стандартная цветная'
+def openstreetmap_map(russia_map):
+        folium.TileLayer(
+        tiles="openstreetmap",
+        attr='<a href=_</a>',
+        max_zoom=19,
+        name='darkmatter',
+        control=False,
+        opacity=0.7).add_to(russia_map)
+
+# стиль карты 'Стандартная приглушённая'
 def cartodbpositron_map(russia_map):
         folium.TileLayer(
         tiles="cartodbpositron",
@@ -105,7 +118,8 @@ def cartodbpositron_map(russia_map):
         name='darkmatter',
         control=False,
         opacity=0.7).add_to(russia_map)
-        
+
+# стиль карты 'ЖД пути и станции'
 def openrailway_map(russia_map):
         folium.TileLayer(
         tiles="https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
@@ -115,6 +129,7 @@ def openrailway_map(russia_map):
         control=False,
         opacity=0.7).add_to(russia_map)
 
+# стиль карты 'ЖД пути и станции 2'
 def thunderforestrail_map(russia_map):
         folium.TileLayer(
         tiles="https://tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey=32828de45b164f449366abd6a45999ef",
