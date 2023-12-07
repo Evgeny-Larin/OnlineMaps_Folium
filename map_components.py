@@ -143,7 +143,23 @@ def thunderforestrail_map(russia_map):
 # кластеризация точек
 def clastering(clasters_on, color, grp_name):
      if clasters_on:
-        return MarkerCluster(name=f'<span style="color: {color};"> ⬤ {grp_name}</span>')
+        h = color.lstrip('#')
+        h = str(tuple(int(h[i:i+2], 16) for i in (0, 2, 4)))
+
+        icon_create_function = """
+    function(cluster) {    
+    var markers = cluster.getAllChildMarkers();
+    var childCount = cluster.getChildCount();
+    var p = 0; 
+    for (i = 0; i < markers.length; i++)
+    if(p === 0){
+      c = 'rgba"""+h+""";'
+    }
+    return new L.DivIcon({ html: '<div style=\"background-color:'+c+'\"><span>' + childCount + '</span></div>', className: 'marker-cluster', iconSize: new L.Point(40, 40)});
+  }
+    """
+        return MarkerCluster(name=f'<span style="color: {color};"> ⬤ {grp_name}</span>', 
+                             icon_create_function=icon_create_function)
      else:
         return folium.FeatureGroup(f'<span style="color: {color};"> ⬤ {grp_name}</span>')
 
