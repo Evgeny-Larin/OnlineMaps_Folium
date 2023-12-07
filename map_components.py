@@ -159,7 +159,7 @@ def city_creator(city_db, russia_map):
 
 # добавляет точки на карту
 # принимает df с координатами необходимых точек, карту, на которую нужно добавить города, палитру цветов
-def points_creator(points, russia_map, hex_palette, point_size, clasters_on):
+def points_creator(points, russia_map, hex_palette, point_size, clasters_on, *args):
     # определяем топ13 компаний и прочие
     top13 = points_rating(points)
     # добавляем к основному df признак топовости компании, остальных помечаем как Прочие
