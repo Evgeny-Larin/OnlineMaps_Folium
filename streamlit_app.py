@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_folium import st_folium
 from map_components import *
 import sqlite3
+import urllib.request
 
 #содержимое страницы по ширине (по умолчанию по центру)
 st.set_page_config(page_title = 'Map Generator', page_icon = '🗺️', layout="wide")
@@ -84,7 +85,8 @@ hex_palette = [hex1,hex2,hex3,hex4,hex5,hex6,hex7,hex8,hex9,hex10,hex11,hex12]
 #если пользователь отмечает города и выбрал какой-либо регион
 if city_on and regions_list != []:
     #подключаемся к базе городов
-    conn = sqlite3.connect(r'https://github.com/Evgeny-Larin/online_maps_folium/raw/main/db/cities_db.db')
+    urllib.request.urlretrieve(r'https://github.com/Evgeny-Larin/online_maps_folium/raw/main/db/cities_db.db', 'cities_db.db')
+    conn = sqlite3.connect('cities_db.db')
     
     #из базы берём только необходимые города
     city_list = points.city.unique()
