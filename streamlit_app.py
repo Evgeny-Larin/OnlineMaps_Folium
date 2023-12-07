@@ -12,7 +12,7 @@ file = st.file_uploader('Загрузите файл Excel с координат
 #образец файла для пользователя
 with st.expander("Пример исходной таблицы"):
     txt = st.write('''Скачайте и заполните шаблон исходной таблицы собственными данными. Столбцы "Широта" и "Долгота" являются обязательными.''')
-    redirect_button("https://github.com/Evgeny-Larin/onlinemaps_folium/raw/main/source/example.xlsx","Скачать шаблон")
+    redirect_button(r"https://github.com/Evgeny-Larin/online_maps_folium/raw/main/source/example.xlsx","Скачать шаблон")
 
 regions_list = []
 if file != None:
@@ -84,7 +84,7 @@ hex_palette = [hex1,hex2,hex3,hex4,hex5,hex6,hex7,hex8,hex9,hex10,hex11,hex12]
 #если пользователь отмечает города и выбрал какой-либо регион
 if city_on and regions_list != []:
     #подключаемся к базе городов
-    conn = sqlite3.connect(r'https://github.com/Evgeny-Larin/online_maps_folium/tree/main/db/cities_db.db')
+    conn = sqlite3.connect(r'https://github.com/Evgeny-Larin/online_maps_folium/raw/main/db/cities_db.db')
     
     #из базы берём только необходимые города
     city_list = points.city.unique()
