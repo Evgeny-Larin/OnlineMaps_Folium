@@ -146,7 +146,7 @@ def clastering(clasters_on, color, grp_name):
         h = color.lstrip('#')
         h = str(tuple(int(h[i:i+2], 16) for i in (0, 2, 4)))
 
-        icon_create_function = """
+        icon_function = """
     function(cluster) {    
     var markers = cluster.getAllChildMarkers();
     var childCount = cluster.getChildCount();
@@ -159,7 +159,7 @@ def clastering(clasters_on, color, grp_name):
   }
     """
         return MarkerCluster(name=f'<span style="color: {color};"> ⬤ {grp_name}</span>', 
-                             icon_create_function=icon_create_function)
+                             icon_create_function=icon_function)
      else:
         return folium.FeatureGroup(f'<span style="color: {color};"> ⬤ {grp_name}</span>')
 
