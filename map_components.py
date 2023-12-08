@@ -1,6 +1,6 @@
 import folium
 from folium import plugins
-from folium.plugins import MarkerCluster
+from folium.plugins import MarkerCluster, MiniMap
 import pandas as pd
 import streamlit as st
 
@@ -96,8 +96,7 @@ def map_creator(df, mapstyle, minimap_on, zoom):
     plugins.Geocoder(collapsed=True, position='topleft').add_to(russia_map)
     # миникарта
     if minimap_on == True:
-        minimap_on = plugins.minimap_on()
-        russia_map.add_child(minimap_on)
+        russia_map.add_child(MiniMap(toggle_display=True))
     return russia_map
 
 # стиль карты 'Стандартная цветная'
