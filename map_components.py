@@ -140,23 +140,18 @@ def thunderforestrail_map(russia_map):
         control=False,
         opacity=0.7).add_to(russia_map)    
         
-# кластеризация точек
+# кластеризация/группировка точек
 def clastering(clasters_on, color, grp_name):
      if clasters_on:
         h = color.lstrip('#')
         h = str(tuple(int(h[i:i+2], 16) for i in (0, 2, 4)))
 
         icon_function = """
-    function(cluster) {    
-    var markers = cluster.getAllChildMarkers();
-    var childCount = cluster.getChildCount();
-    var p = 0; 
-    for (i = 0; i < markers.length; i++)
-    if(p === 0){
-      c = 'rgba"""+h+""";'
-    }
+    function(cluster) {
+    const childCount = cluster.getChildCount();
+    c = 'rgba"""+h+""";'
     return new L.DivIcon({ html: '<div style=\"background-color:'+c+'\"><span>' + childCount + '</span></div>', className: 'marker-cluster', iconSize: new L.Point(40, 40)});
-  }
+}
     """
         return MarkerCluster(name=f'<span style="color: {color};"> ⬤ {grp_name}</span>', 
                              icon_create_function=icon_function)
@@ -175,7 +170,7 @@ def city_creator(city_db, russia_map):
 
 # добавляет точки на карту
 # принимает df с координатами необходимых точек, карту, на которую нужно добавить города, палитру цветов
-def points_creator(points, russia_map, hex_palette, point_size, clasters_on):
+def points_creator(points, russia_map, hex_palette, point_size, clasters_on, total_on, hex_total):
     # определяем топ13 компаний и прочие
     top13 = points_rating(points)
     # добавляем к основному df признак топовости компании, остальных помечаем как Прочие
@@ -185,11 +180,13 @@ def points_creator(points, russia_map, hex_palette, point_size, clasters_on):
                              on = 'name')\
                       .sort_values('all_count', ascending = False)
 
+    # если есть компании, не вошедшие в топ - называем их ПРОЧИЕ
     try:
         points_region['labels'].fillna(top13[top13['name'] == 'ПРОЧИЕ']['labels'][0], inplace = True)
     except:
         pass
     
+
     # распределяем цвета из hex палитры среди топ13 компаний
     comp_n_colors = color_distributor(top13, hex_palette)
     # группируем по подписи легенды
@@ -219,6 +216,27 @@ def points_creator(points, russia_map, hex_palette, point_size, clasters_on):
                                          weight_color = 'black', 
                                          fill_opacity=1, 
                                          fill_color=color).add_to(feature_group)
+        feature_group.add_to(russia_map)
+
+
+    # если включено выведение общего итога
+    if total_on:
+        feature_group = clastering(clasters_on, hex_total, f"Итого — {points.shape[0]}")
+
+        # для каждой строки в points
+        for row in points.itertuples():
+            # рисуем точку. row3 и row4 - координаты, row2 - адрес точки
+            folium.Circle(location=[row[3], row[4]], 
+                                         radius=point_size,
+                                         popup=repr(row[2]),
+                                         tooltip=row[1], 
+                                         fill = True, 
+                                         weight=0.5, 
+                                         color = 'black', 
+                                         weight_color = 'black', 
+                                         fill_opacity=1, 
+                                         fill_color=hex_total).add_to(feature_group)
+            
         feature_group.add_to(russia_map)
 
     # добавляем панель управления группами (легенду) на карту

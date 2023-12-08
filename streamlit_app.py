@@ -52,7 +52,12 @@ with st.sidebar:
 
     city_on = st.checkbox('Отображать города на карте')
     minimap_on = st.checkbox('Отображать мини-карту')
-    clasters_on = st.checkbox('Группировать точки при изменении масштаба')
+    total_on = st.checkbox('Отображать группу общих итогов')
+    if total_on:
+        hex_total = st.color_picker('Цвет для группы общих итогов', '#000000', key = 100)
+    else:
+        hex_total = False
+    clasters_on = st.checkbox('Кластеровать точки при изменении масштаба')
 
     point_size = st.slider('Размер точек', 10, 200, 90)
     zoom = st.slider('Исходный масштаб карты', 1, 15, 7)
@@ -107,7 +112,7 @@ if regions_list ==  ["Все регионы на одной карте"]:
         city_creator(city_db, russia_map)
 
     # отмечаем точки на карте    
-    points_creator(points, russia_map, hex_palette, point_size, clasters_on)
+    points_creator(points, russia_map, hex_palette, point_size, clasters_on, total_on, hex_total)
     
     # добавляем пользовательскую подпись (атрибуцию) в правой нижней части карты
     add_atr(russia_map)
@@ -144,7 +149,7 @@ else:
             city_creator(city_db, russia_map)
         
         # отмечаем точки на карте
-        points_creator(points_region, russia_map, hex_palette, point_size, clasters_on)
+        points_creator(points_region, russia_map, hex_palette, point_size, clasters_on, total_on, hex_total)
         
         # добавляем пользовательскую подпись (атрибуцию) в правой нижней части карты
         add_atr(russia_map)
