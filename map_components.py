@@ -149,8 +149,12 @@ def clastering(clasters_on, color, grp_name):
         icon_function = """
     function(cluster) {
     const childCount = cluster.getChildCount();
-    c = 'rgba"""+h+""";'
-    return new L.DivIcon({ html: '<div style=\"background-color:'+c+'\"><span>' + childCount + '</span></div>', className: 'marker-cluster', iconSize: new L.Point(40, 40)});
+    var c = 'rgba"""+h+""";'
+    var r = parseInt(c.substring(5, c.indexOf(',')));
+    var g = parseInt(c.substring(c.indexOf(',') + 1, c.lastIndexOf(',')));
+    var b = parseInt(c.substring(c.lastIndexOf(',') + 1, c.lastIndexOf(')')));
+    var text_c = "rgba(" + (255 - r) + ", " + (255 - g) + ", " + (255 - b) + ")";
+    return new L.DivIcon({ html: '<div style=\"background-color:'+c+'; color: '+text_c+';\"><span>' + childCount + '</span></div>', className: 'marker-cluster', iconSize: new L.Point(40, 40)});
 }
     """
         return MarkerCluster(name=f'<span style="color: {color};"> ⬤ {grp_name}</span>', 
