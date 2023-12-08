@@ -54,7 +54,7 @@ with st.sidebar:
     minimap_on = st.checkbox('Отображать мини-карту')
     clasters_on = st.checkbox('Группировать точки при изменении масштаба')
 
-    point_size = st.slider('Размер точек', 50, 200, 90)
+    point_size = st.slider('Размер точек', 10, 200, 90)
     zoom = st.slider('Исходный масштаб карты', 1, 15, 7)
 
     # настройка легенды
