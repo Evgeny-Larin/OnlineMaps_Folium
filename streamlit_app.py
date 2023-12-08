@@ -18,12 +18,7 @@ with st.expander("Пример исходной таблицы"):
 regions_list = []
 if file != None:
     points = pd.read_excel(file)
-    points.rename(columns = {'Наименование':'name',
-                             'Адрес':'address',
-                             'Широта': 'lat',
-                             'Долгота':'lon',
-                             'Город':'city',
-                             'Регион':'SubRegion'}, inplace = True)
+    points.columns = ['name', 'address', 'lat', 'lon', 'city', 'SubRegion']
     
     points['name'].fillna('Имя не указано', inplace = True)        
     points['address'].fillna('Адрес не указан', inplace = True) 
