@@ -1,2 +1,2 @@
-Инструмент для создания карт folium для пользователей, не работающих в python (с применением streamlit)  
+Веб-инструмент создания интерактивных карт folium
 https://onlinemapsfolium.streamlit.app/
