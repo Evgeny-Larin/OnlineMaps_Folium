@@ -1,2 +1,2 @@
-Веб-инструмент создания интерактивных карт folium
+Веб-инструмент создания интерактивных карт folium  
 https://onlinemapsfolium.streamlit.app/
