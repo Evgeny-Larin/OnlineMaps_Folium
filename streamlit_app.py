@@ -52,7 +52,7 @@ with st.sidebar:
         hex_total = st.color_picker('Цвет для группы общих итогов', '#000000', key = 100)
     else:
         hex_total = False
-    clasters_on = st.checkbox('Кластеровать точки при изменении масштаба')
+    clasters_on = st.checkbox('Кластеризовать точки при изменении масштаба')
 
     point_size = st.slider('Размер точек', 10, 200, 90)
     zoom = st.slider('Исходный масштаб карты', 1, 15, 7)
